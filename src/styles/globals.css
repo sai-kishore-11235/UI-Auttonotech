@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #1e3a8a;
+  --secondary-color: #0ea5e9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-gray-50;
+  font-family: 'Inter', sans-serif;
+}
+
+.hero-section {
+  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
