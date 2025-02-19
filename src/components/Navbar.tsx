@@ -22,12 +22,10 @@ export default function Navbar() {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="#services" className="text-gray-700 hover:text-blue-600">Services</Link>
-            <Link href="#about" className="text-gray-700 hover:text-blue-600">Industries</Link>
-            <Link href="#contact" className="text-gray-700 hover:text-blue-600">Contact</Link>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-              Get Started
-            </button>
+            <Link href="/ServicesPage" className="text-gray-700 hover:text-blue-600">Services</Link>
+            <Link href="/IndustriesPage" className="text-gray-700 hover:text-blue-600">Industries</Link>
+            <Link href="/BlogPage" className="text-gray-700 hover:text-blue-600">Blog</Link>
+            <Link href="/ContactPage" className="text-gray-700 hover:text-blue-600">Contact</Link>
           </div>
         </div>
       </div>

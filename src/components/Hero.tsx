@@ -1,4 +1,8 @@
+import { useRouter } from 'next/navigation';
+
 export default function Hero() {
+  const router = useRouter();
+
   return (
     <section className="w-full pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col items-center justify-center text-white bg-gradient-to-b from-black to-blue-900">
       <div className="text-center px-4 md:px-8 mb-12 md:mb-16">
@@ -8,7 +12,10 @@ export default function Hero() {
         <p className="text-xl md:text-2xl mb-8">
           Transforming industries with cutting-edge automation technology
         </p>
-        <button className="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+        <button 
+          onClick={() => router.push('/ContactPage')}
+          className="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full transition duration-300"
+        >
           Get Started
         </button>
       </div>
