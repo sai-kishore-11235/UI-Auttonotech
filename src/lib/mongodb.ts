@@ -6,6 +6,15 @@ if (!process.env.MONGODB_URI) {
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
+declare global {
+  var mongoose: MongooseCache | undefined;
+}
+
 let cached = global.mongoose;
 
 if (!cached) {
@@ -13,28 +22,37 @@ if (!cached) {
 }
 
 async function connectDB() {
-  if (cached.conn) {
+  if (cached?.conn) {
     return cached.conn;
   }
 
-  if (!cached.promise) {
+  if (!cached?.promise) {
     const opts = {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
-      return mongoose;
-    });
+    if (cached) {
+      cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+        return mongoose;
+      });
+    }
+  }
+  try {
+    if (cached?.promise) {
+      cached.conn = await cached.promise;
+    }
+  } catch (e) {
+    if (cached) {
+      cached.promise = null;
+    }
+    throw e;
   }
 
-  try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
+  if (!cached?.conn) {
+    throw new Error('MongoDB connection failed');
   }
 
   return cached.conn;
 }
 
-export default connectDB; 
+export default connectDB;
