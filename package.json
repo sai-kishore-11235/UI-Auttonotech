@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.10",
+    "mongoose": "^8.10.1",
     "next": "^13.4.7",
     "npx": "^10.2.2",
     "react": "^18.2.0",

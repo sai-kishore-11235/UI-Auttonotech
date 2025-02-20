@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Image from 'next/image';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -11,11 +10,42 @@ export default function ContactPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Here you would typically handle the form submission to your backend
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        phone: '',
+        message: ''
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to submit form');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,6 +77,11 @@ export default function ContactPage() {
               {!submitted ? (
                 <>
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a message</h2>
+                  {error && (
+                    <div className="mb-4 p-4 text-red-700 bg-red-100 rounded-md">
+                      {error}
+                    </div>
+                  )}
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -123,9 +158,12 @@ export default function ContactPage() {
 
                     <button
                       type="submit"
-                      className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+                      disabled={loading}
+                      className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 ${
+                        loading ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     >
-                      Send Message
+                      {loading ? 'Sending...' : 'Send Message'}
                     </button>
                   </form>
                 </>
